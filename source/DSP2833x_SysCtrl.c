@@ -19,6 +19,8 @@
 #include "DSP2833x_Device.h"     // Headerfile Include File
 #include "DSP2833x_Examples.h"   // Examples Include File
 
+#define FLASH
+
 //
 // Functions that will be run from RAM need to be assigned to
 // a different section.  This section will then be mapped to a load and
@@ -52,6 +54,16 @@ InitSysCtrl(void)
     // Initialize the peripheral clocks
     //
     InitPeripheralClocks();
+}
+
+void if_flash_init(void){
+#ifdef FLASH
+    memcpy( &RamfuncsRunStart,
+            &RamfuncsLoadStart,
+            &RamfuncsLoadEnd - &RamfuncsLoadStart);
+    InitFlash();
+
+#endif
 }
 
 //
@@ -280,7 +292,7 @@ InitPeripheralClocks(void)
     // HISPCP/LOSPCP prescale register settings, normally it will be set to 
     // default values
     //
-    SysCtrlRegs.HISPCP.all = 0x0001;
+    SysCtrlRegs.HISPCP.all = 0x0000;
     SysCtrlRegs.LOSPCP.all = 0x0002;
 
     //

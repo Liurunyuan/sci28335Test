@@ -86,9 +86,9 @@ PAGE 0 :
    BEGIN      : origin = 0x000000, length = 0x000002     /* Boot to M0 will go here                      */
    RAMM0      : origin = 0x000050, length = 0x0003B0
    RAML0      : origin = 0x008000, length = 0x001000
-   RAML1      : origin = 0x009000, length = 0x001000
-   RAML2      : origin = 0x00A000, length = 0x001000
-   RAML3      : origin = 0x00B000, length = 0x001000
+   RAML1      : origin = 0x009000, length = 0x002800
+   RAML2      : origin = 0x00B800, length = 0x000100
+   RAML3      : origin = 0x00B900, length = 0x000100
    ZONE7A     : origin = 0x200000, length = 0x00FC00    /* XINTF zone 7 - program space */
    CSM_RSVD   : origin = 0x33FF80, length = 0x000076     /* Part of FLASHA.  Program with all 0x0000 when CSM is in use. */
    CSM_PWL    : origin = 0x33FFF8, length = 0x000008     /* Part of FLASHA.  CSM password locations in FLASHA            */
@@ -128,8 +128,9 @@ SECTIONS
    .pinit           : > RAML0,     PAGE = 0
    .switch          : > RAML0,     PAGE = 0
 
-   .stack           : > RAMM1,     PAGE = 1
+   .stack           : > RAML7,     PAGE = 1
    .ebss            : > RAML4,     PAGE = 1
+   .cio				: > RAML4,     PAGE = 1
    .econst          : > RAML5,     PAGE = 1
    .esysmem         : > RAMM1,     PAGE = 1
 
