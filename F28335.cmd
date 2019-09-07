@@ -83,10 +83,16 @@ PAGE 0:    /* Program Memory */
    ZONE7A      : origin = 0x0200000, length = 0x00FC00    /* XINTF zone 7 - program space */ 
    FLASHH      : origin = 0x300000, length = 0x008000     /* on-chip FLASH */
    FLASHG      : origin = 0x308000, length = 0x008000     /* on-chip FLASH */
-   FLASHF      : origin = 0x310000, length = 0x008000     /* on-chip FLASH */
+
+   	/*-----------------------------------------------------------------------------*/
+	FLASHF_BEGIN : origin = 0x310000, length = 0x000010
+	/*-----------------------------------------------------------------------------*/
+
+   FLASHF      : origin = 0x310010, length = 0x007FF0     /* on-chip FLASH */
    FLASHE      : origin = 0x318000, length = 0x008000     /* on-chip FLASH */
    FLASHD      : origin = 0x320000, length = 0x008000     /* on-chip FLASH */
    FLASHC      : origin = 0x328000, length = 0x008000     /* on-chip FLASH */
+
    FLASHA      : origin = 0x338000, length = 0x007F80     /* on-chip FLASH */
    CSM_RSVD    : origin = 0x33FF80, length = 0x000076     /* Part of FLASHA.  Program with all 0x0000 when CSM is in use. */
    BEGIN       : origin = 0x33FFF6, length = 0x000002     /* Part of FLASHA.  Used for "boot to Flash" bootloader mode. */
@@ -127,11 +133,11 @@ SECTIONS
 {
  
    /* Allocate program areas: */
-   .cinit              : > FLASHA      PAGE = 0
-   .pinit              : > FLASHA,     PAGE = 0
-   .text               : > FLASHA      PAGE = 0
-   codestart           : > BEGIN       PAGE = 0
-   ramfuncs            : LOAD = FLASHD, 
+   .cinit              : > FLASHF      PAGE = 0
+   .pinit              : > FLASHF,     PAGE = 0
+   .text               : > FLASHF      PAGE = 0
+   codestart           : > FLASHF_BEGIN       PAGE = 0
+   ramfuncs            : LOAD = FLASHF,
                          RUN = RAML0, 
                          LOAD_START(_RamfuncsLoadStart),
                          LOAD_END(_RamfuncsLoadEnd),
@@ -149,8 +155,8 @@ SECTIONS
 
    /* Initalized sections go in Flash */
    /* For SDFlash to program these, they must be allocated to page 0 */
-   .econst             : > FLASHA      PAGE = 0
-   .switch             : > FLASHA      PAGE = 0      
+   .econst             : > FLASHF      PAGE = 0
+   .switch             : > FLASHF      PAGE = 0
 
    /* Allocate IQ math areas: */
    IQmath              : > FLASHC      PAGE = 0                  /* Math Code */

@@ -98,7 +98,7 @@ EnableInterrupts()
 	PieCtrlRegs.PIEIER8.bit.INTx5 = 1;//SCIC RX Interrupt
 	PieCtrlRegs.PIEIER8.bit.INTx6 = 1;//SCIC TX Interrupt
 	PieCtrlRegs.PIEIER9.bit.INTx3 = 1;//SCIB RX interrupt
-	PieCtrlRegs.PIEIER9.bit.INTx4 = 1;//SCIB TX interrupt
+//	PieCtrlRegs.PIEIER9.bit.INTx4 = 1;//SCIB TX interrupt
 
 //	EPwm1Regs.ETSEL.bit.INTEN =1;
 

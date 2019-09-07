@@ -26,7 +26,7 @@
 //
 #include "DSP2833x_Device.h"     // DSP2833x Headerfile Include File
 #include "DSP2833x_Examples.h"   // DSP2833x Examples Include File
-
+void Timer0_ISR_Thread();
 //
 // INT13_ISR - Connected to INT13 of CPU (use MINT13 mask):
 // Note CPU-Timer1 is reserved for TI use, however XINT13
@@ -519,8 +519,9 @@ TINT0_ISR(void)      // CPU-Timer 0
     // Next two lines for debug only to halt the processor here
     // Remove after inserting ISR Code
     //
-    asm ("      ESTOP0");
-    for(;;);
+    Timer0_ISR_Thread();
+    // To receive more interrupts from this PIE group, acknowledge this interrupt
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
 }
 
 //

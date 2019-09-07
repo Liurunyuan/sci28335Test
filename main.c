@@ -7,7 +7,7 @@
 #include <string.h>
 
 
-#define UART_PRINTF
+//#define UART_PRINTF
 
 #ifdef UART_PRINTF
     int fputc(int _c, register FILE *_fp);
@@ -67,12 +67,34 @@ void scib_fifo_init(void)
 void delayCount(int32 count){
     int32 i;
 	for(i = 0; i < count; ++i){
-		asm("   NOP");
+
 	}
+}
+
+void Timer0_ISR_Thread(void){
+
+    static unsigned char count = 0;
+
+    ++count;
+
+    if(count >= 400){
+        count = 0;
+//        printf("user timer 0 4s\r\n");
+    }
+}
+
+
+void InitCpuTimer0(void){
+    InitCpuTimers();
+    ConfigCpuTimer(&CpuTimer0, 120, 20000);//20ms
+    CpuTimer0Regs.TCR.bit.TIE= 1;
+    CpuTimer0Regs.TCR.bit.TSS = 0;
 }
 
 void InitInterrupt(void){
 	DINT;
+    DINT;
+    DRTM;
 	InitPieCtrl();
 	IER = 0x0000;
 	IFR = 0x0000;
@@ -84,7 +106,7 @@ void InitInterrupt(void){
     IER |= M_INT7;
  	IER |= M_INT8;//SCIc
     IER |= M_INT9;//SCIa//ECAN//scib
-    IER |= M_INT13;//timer1
+//    IER |= M_INT13;
 	EnableInterrupts();
 }
 
@@ -94,16 +116,23 @@ int main(void)
 
     InitSciGpio();
 
+    InitCpuTimer0();
+
     scib_loopback_init();
 
     scib_fifo_init();
 
     InitInterrupt();
 
+
 	while(1){
-    	printf("test\n");
-    	printf("-----------------------\r\n");
-    	printf("boot loader start\r\n");
-        delayCount(100000);
+//    	printf("-----------------------\r\n");
+
+//    	printf("this is user code luruntian \r\n");
+	    while(ScibRegs.SCIFFTX.bit.TXFFST != 0){
+	     }
+	          ScibRegs.SCITXBUF = 0xaa;
+
+        delayCount(10000);
 	}
 }
